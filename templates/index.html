@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zovo Ecommerce</title>
+
+  <!-- FontAwesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0d1b2a;
+      color: #f1faee;
+    }
+
+    /* ================= NAVBAR ================= */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1b263b;
+      padding: 10px 20px;
+    }
+    .navbar .logo { display: flex; align-items: center; }
+    .navbar img { height: 40px; margin-right: 10px; }
+    .navbar h1 { font-size: 20px; margin: 0; color: #ffd166; }
+    .search-bar { flex: 1; margin: 0 20px; display: flex; }
+    .search-bar input { flex: 1; padding: 8px; border-radius: 20px 0 0 20px; border: none; outline: none; }
+    .search-bar button { padding: 8px 15px; border: none; background: #e63946; color: white; cursor: pointer; }
+    .clear-search { padding: 8px 15px; border: none; background: #ffd166; color: black; border-radius: 0 20px 20px 0; cursor: pointer; display: none; }
+    .nav-links { display: flex; gap: 15px; align-items: center; }
+    .nav-links a { color: #f1faee; text-decoration: none; font-size: 14px; transition: 0.3s; }
+    .nav-links a:hover { color: #ffd166; }
+    .cart-link span { background: #e63946; padding: 2px 6px; border-radius: 50%; font-size: 12px; margin-left: 5px; }
+
+    /* ================= CATEGORY BAR ================= */
+    .category-bar { display: flex; align-items: center; background-color: #243447; padding: 10px; overflow-x: auto; white-space: nowrap; }
+    .category-bar::-webkit-scrollbar { display: none; }
+    .category-item { display: inline-block; margin: 0 15px; font-size: 14px; cursor: pointer; color: #f1faee; transition: color 0.3s; }
+    .category-item:hover { color: #ffd166; }
+
+    /* ================= HERO BANNER ================= */
+    .hero img { width: 100%; display: block; margin-bottom: 20px; }
+
+    /* ================= FEATURED CATEGORIES ================= */
+    .featured { padding: 20px; text-align: center; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-top: 15px; }
+    .cat-card { background: #1b263b; padding: 20px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+    .cat-card:hover { background: #ffd166; color: #000; }
+
+    /* ================= TRENDING PRODUCTS ================= */
+    .trending { padding: 20px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-top: 15px; }
+    .product-card { background: #1b263b; padding: 15px; border-radius: 10px; text-align: center; transition: transform 0.3s; }
+    .product-card img { max-width: 100%; border-radius: 10px; height: 150px; object-fit: cover; }
+    .product-card:hover { transform: translateY(-5px); }
+    .product-card button { margin-top: 10px; padding: 8px 15px; border: none; background: #e63946; color: white; border-radius: 5px; cursor: pointer; }
+    .product-card button:hover { background: #ffd166; color: #000; }
+
+    .no-results { text-align: center; margin-top: 20px; font-size: 18px; color: #e63946; display: none; }
+
+    /* ================= FOOTER ================= */
+    .footer { background-color: #1b263b; padding: 40px 20px 10px 20px; margin-top: 20px; }
+    .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .footer h3 { color: #a8dadc; margin-bottom: 10px; }
+    .footer p, .footer a { font-size: 14px; color: #f1faee; text-decoration: none; }
+    .footer a:hover { color: #ffd166; }
+    .social-icons i { margin-right: 10px; font-size: 18px; cursor: pointer; transition: 0.3s; }
+    .social-icons i:hover { color: #ffd166; }
+    .secure-payments { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #a8dadc; }
+    .secure-payments h4 { margin-bottom: 10px; color: #ffd166; }
+    .payment-icons img { height: 35px; margin: 0 10px; vertical-align: middle; }
+    .copyright { text-align: center; margin-top: 15px; font-size: 12px; color: #a8dadc; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="https://dummyimage.com/40x40/ffd166/000000.png&text=Z" alt="Zovo Logo">
+      <h1>Zovo</h1>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button id="searchBtn"><i class="fas fa-search"></i></button>
+      <button class="clear-search" id="clearSearch">Clear</button>
+    </div>
+    <div class="nav-links">
+      <a href="#">Address</a>
+      <a href="#">Sign In / Login</a>
+      <a href="#">Orders</a>
+      <a href="{% url 'cart_view' %}" class="cart-link">
+        <i class="fas fa-shopping-cart"></i>
+        Cart <span id="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- CATEGORY BAR -->
+  <div class="category-bar">
+    <div class="category-item">Fruits</div>
+    <div class="category-item">Vegetables</div>
+    <div class="category-item">Dairy</div>
+    <div class="category-item">Bakery</div>
+    <div class="category-item">Essentials</div>
+    <div class="category-item">Snacks</div>
+    <div class="category-item">Beverages</div>
+    <div class="category-item">Personal Care</div>
+    <div class="category-item">Electronics</div>
+    <div class="category-item">Sports</div>
+  </div>
+
+  <!-- HERO BANNER -->
+  <section class="hero">
+    <img src="https://dummyimage.com/1200x400/ffd166/000000.png&text=Big+Sale+50%25+OFF" alt="Hero Banner">
+  </section>
+
+  <!-- FEATURED CATEGORIES -->
+  <section class="featured">
+    <h2>Shop by Category</h2>
+    <div class="category-grid">
+      <div class="cat-card">🍎 Fruits</div>
+      <div class="cat-card">🥬 Vegetables</div>
+      <div class="cat-card">🥛 Dairy</div>
+      <div class="cat-card">🥖 Bakery</div>
+    </div>
+  </section>
+
+  <!-- TRENDING PRODUCTS -->
+  <section class="trending">
+    <h2>Trending Products</h2>
+    <div class="product-grid" id="productGrid">
+      {% for product in products %}
+      <div class="product-card" data-name="{{ product.product_name }}" data-category="{{ product.category }}">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+        {% else %}
+          <img src="{% static 'images/placeholder.png' %}" alt="No image available">
+        {% endif %}
+        <h3>{{ product.product_name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Price: ₹{{ product.price }}</p>
+        <button class="add-to-cart" 
+                data-id="{{ product.product_id }}" 
+                data-name="{{ product.product_name }}" 
+                data-price="{{ product.price }}">
+          Add to Cart
+        </button>
+      </div>
+      {% empty %}
+      <p>No products available.</p>
+      {% endfor %}
+    </div>
+    <div class="no-results" id="noResults">No results found</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div>
+        <h3>About Zovo</h3>
+        <p>Zovo is your trusted ecommerce platform for quality products at the best prices.</p>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <a href="#">Home</a><br>
+        <a href="#">About Us</a><br>
+        <a href="#">Products</a><br>
+        <a href="#">Contact Us</a>
+      </div>
+      <div>
+        <h3>Policies</h3>
+        <a href="#">Privacy Policy</a><br>
+        <a href="#">Terms & Conditions</a><br>
+        <a href="#">Refund Policy</a>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p>123 Zovo Street, Hyderabad, India</p>
+        <p>📞 +91 98765 43210</p>
+        <p>✉ support@zovo.com</p>
+        <div class="social-icons">
+          <i class="fab fa-facebook"></i>
+          <i class="fab fa-instagram"></i>
+          <i class="fab fa-twitter"></i>
+          <i class="fab fa-linkedin"></i>
+        </div>
+      </div>
+    </div>
+    <div class="secure-payments">
+      <h4>100% Secure Payments</h4>
+      <div class="payment-icons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mastercard-logo.png" alt="MasterCard">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/UPI-Logo-vector.svg" alt="UPI">
+      </div>
+    </div>
+    <div class="copyright">
+      © 2025 Zovo. All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartCountElement = document.getElementById("cart-count");
+
+    function updateCartCount() {
+      let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCountElement.textContent = totalItems;
+    }
+
+    document.addEventListener("click", function(e) {
+      if (e.target.classList.contains("add-to-cart")) {
+        const id = e.target.getAttribute("data-id");
+        const name = e.target.getAttribute("data-name");
+        const price = parseFloat(e.target.getAttribute("data-price"));
+
+        let existing = cart.find(item => item.id === id);
+        if (existing) existing.quantity += 1;
+        else cart.push({ id, name, price, quantity: 1 });
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+        alert(name + " added to cart!");
+      }
+    });
+
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const clearSearch = document.getElementById("clearSearch");
+    const productGrid = document.getElementById("productGrid");
+    const noResults = document.getElementById("noResults");
+    const products = document.querySelectorAll(".product-card");
+
+    function searchProducts() {
+      const query = searchInput.value.toLowerCase();
+      let matches = 0;
+      products.forEach(product => {
+        const name = product.getAttribute("data-name").toLowerCase();
+        const category = product.getAttribute("data-category").toLowerCase();
+        if (name.includes(query) || category.includes(query)) {
+          product.style.display = "block";
+          matches++;
+        } else product.style.display = "none";
+      });
+      noResults.style.display = matches === 0 ? "block" : "none";
+      clearSearch.style.display = query ? "inline-block" : "none";
+    }
+
+    searchBtn.addEventListener("click", searchProducts);
+    searchInput.addEventListener("keypress", e => { if (e.key === "Enter") searchProducts(); });
+    clearSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      products.forEach(p => p.style.display = "block");
+      noResults.style.display = "none";
+      clearSearch.style.display = "none";
+    });
+
+    const categoryItems = document.querySelectorAll(".category-item");
+    categoryItems.forEach(item => {
+      item.addEventListener("click", () => {
+        const category = item.textContent.toLowerCase();
+        let matches = 0;
+        products.forEach(product => {
+          const prodCategory = product.getAttribute("data-category").toLowerCase();
+          if (prodCategory === category) {
+            product.style.display = "block";
+            matches++;
+          } else product.style.display = "none";
+        });
+        noResults.style.display = matches === 0 ? "block" : "none";
+        clearSearch.style.display = "inline-block";
+      });
+    });
+
+    updateCartCount();
+  </script>
+
+</body>
+</html>
