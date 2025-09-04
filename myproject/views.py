@@ -3,20 +3,37 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Product, Cart, Order, OrderItem, User
-
 # ================= HOME PAGE =================
 def index(request):
     """
-    Display all products on the home page
+     Display all products on the home page with dynamic categories
     """
     products = Product.objects.all()  # Get all products
-    return render(request, 'index.html', {'products': products})
+        # Get all unique categories for the category bar
+    categories = Product.objects.values_list('category', flat=True).distinct()
+    return render(request, 'index.html', {'products': products, 'categories': categories})
+
+# ================= CATEGORY VIEW =================
+def category_view(request, category_name):
+    """
+    Display products for a specific category
+    """
+    products = Product.objects.filter(category=category_name)
+    
+    # Also send categories for the category bar
+    categories = Product.objects.values_list('category', flat=True).distinct()
+    
+    return render(request, 'category.html', {
+        'products': products,
+        'category': category_name,
+        'categories': categories
+    })
 
 # ================= CART VIEW =================
 @login_required
 def cart_view(request):
     """
-    Show current logged-in user's cart items
+    Show current logged-in user's cart items    
     """
     cart_items = Cart.objects.filter(user=request.user)  # Only this user's items
     total = sum(item.product.price * item.quantity for item in cart_items)  # Total cost
@@ -66,9 +83,7 @@ def checkout(request):
     cart_items = Cart.objects.filter(user=request.user)
     total = sum(item.product.price * item.quantity for item in cart_items)
     return render(request, 'checkout.html', {'cart_items': cart_items, 'total': total})
-from django.shortcuts import render
-from .models import Order
-
+# ================= ORDERS VIEW =================
 @login_required
 def orders_view(request):
     """Display all orders for the logged-in user"""

@@ -2,14 +2,17 @@
 
 from django.contrib import admin
 from django.urls import path
+from myproject import views
 from myproject.views import (
     index,
     cart_view,
     add_to_cart,
     remove_from_cart,
     checkout,
-    orders_view
+    orders_view,
+    category_view  # Add this
 )
+
 
 # ✅ Add these imports
 from django.conf import settings
@@ -25,6 +28,7 @@ urlpatterns = [
     path('cart/', cart_view, name='cart_view'),
     path('cart/add/<int:product_id>/', add_to_cart, name='add_to_cart'),
     path('cart/remove/<int:cart_id>/', remove_from_cart, name='remove_from_cart'),
+    path('category/<str:category_name>/', views.category_view, name='category_view'),# Category page
 
     # Checkout
     path('checkout/', checkout, name='checkout'),

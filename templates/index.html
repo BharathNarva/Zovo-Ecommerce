@@ -102,18 +102,20 @@
   </div>
 
   <!-- CATEGORY BAR -->
-  <div class="category-bar">
-    <div class="category-item">Fruits</div>
-    <div class="category-item">Vegetables</div>
-    <div class="category-item">Dairy</div>
-    <div class="category-item">Bakery</div>
-    <div class="category-item">Essentials</div>
-    <div class="category-item">Snacks</div>
-    <div class="category-item">Beverages</div>
-    <div class="category-item">Personal Care</div>
-    <div class="category-item">Electronics</div>
-    <div class="category-item">Sports</div>
-  </div>
+ <div class="category-bar">
+    <a href="{% url 'category_view' 'Fruits' %}" class="category-item">Fruits</a>
+    <a href="{% url 'category_view' 'Vegetables' %}" class="category-item">Vegetables</a>
+    <a href="{% url 'category_view' 'Dairy' %}" class="category-item">Dairy</a>
+    <a href="{% url 'category_view' 'Bakery' %}" class="category-item">Bakery</a>
+    <a href="{% url 'category_view' 'Essentials' %}" class="category-item">Essentials</a>
+    <a href="{% url 'category_view' 'Snacks' %}" class="category-item">Snacks</a>
+    <a href="{% url 'category_view' 'Beverages' %}" class="category-item">Beverages</a>
+    <a href="{% url 'category_view' 'Personal Care' %}" class="category-item">Personal Care</a>
+    <a href="{% url 'category_view' 'Electronics' %}" class="category-item">Electronics</a>
+    <a href="{% url 'category_view' 'Furniture' %}" class="category-item">Furniture</a>
+    <a href="{% url 'category_view' 'Sports' %}" class="category-item">Sports</a>
+</div>
+
 
   <!-- HERO BANNER -->
   <section class="hero">

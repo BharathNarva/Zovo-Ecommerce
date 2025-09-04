@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ category }} Products</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .category-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .category-item { padding: 8px 12px; background: #f0f0f0; border-radius: 5px; text-decoration: none; color: #333; }
+        .category-item:hover { background: #ddd; }
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
+        .product-card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center; }
+        .product-card img { max-width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
+        .product-card h3 { margin: 10px 0 5px; }
+        .product-card p { margin: 0; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>{{ category }}</h1>
+
+<!-- Dynamic Category Bar -->
+<div class="category-bar">
+    <a href="{% url 'index' %}" class="category-item">All</a>
+    {% for cat in categories %}
+        <a href="{% url 'category_view' cat %}" class="category-item">{{ cat }}</a>
+    {% endfor %}
+</div>
+
+<!-- Products Grid -->
+<div class="products">
+    {% for product in products %}
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/150" alt="{{ product.product_name }}">
+            {% endif %}
+            <h3>{{ product.product_name }}</h3>
+            <p>${{ product.price }}</p>
+            <form method="post" action="{% url 'add_to_cart' product.product_id %}">
+                {% csrf_token %}
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>No products available in this category.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
