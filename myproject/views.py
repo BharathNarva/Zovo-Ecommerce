@@ -3,15 +3,28 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Product, Cart, Order, OrderItem, User
+
+
 # ================= HOME PAGE =================
 def index(request):
     """
-     Display all products on the home page with dynamic categories
+    Display trending products and all products on the home page
+    with dynamic categories for the category bar
     """
-    products = Product.objects.all()  # Get all products
-        # Get all unique categories for the category bar
-    categories = Product.objects.values_list('category', flat=True).distinct()
-    return render(request, 'index.html', {'products': products, 'categories': categories})
+    products = Product.objects.all()  # All products
+
+    # Trending products (requires BooleanField 'trending' in Product model)
+    trending_products = Product.objects.filter(trending=True)[:6]  # limit to 6
+
+    # All unique categories for category bar
+    categories = Product.objects.values_list("category", flat=True).distinct()
+
+    return render(request, "index.html", {
+        "products": products,
+        "trending_products": trending_products,
+        "categories": categories
+    })
+
 
 # ================= CATEGORY VIEW =================
 def category_view(request, category_name):
@@ -19,25 +32,31 @@ def category_view(request, category_name):
     Display products for a specific category
     """
     products = Product.objects.filter(category=category_name)
-    
-    # Also send categories for the category bar
-    categories = Product.objects.values_list('category', flat=True).distinct()
-    
-    return render(request, 'category.html', {
-        'products': products,
-        'category': category_name,
-        'categories': categories
+
+    # Also send categories for category bar
+    categories = Product.objects.values_list("category", flat=True).distinct()
+
+    return render(request, "category.html", {
+        "products": products,
+        "category": category_name,
+        "categories": categories
     })
+
 
 # ================= CART VIEW =================
 @login_required
 def cart_view(request):
     """
-    Show current logged-in user's cart items    
+    Show current logged-in user's cart items
     """
     cart_items = Cart.objects.filter(user=request.user)  # Only this user's items
     total = sum(item.product.price * item.quantity for item in cart_items)  # Total cost
-    return render(request, "cart.html", {"cart_items": cart_items, "total": total})
+
+    return render(request, "cart.html", {
+        "cart_items": cart_items,
+        "total": total
+    })
+
 
 # ================= ADD TO CART =================
 @login_required
@@ -54,6 +73,7 @@ def add_to_cart(request, product_id):
 
     return redirect("cart_view")  # Redirect to cart page
 
+
 # ================= REMOVE FROM CART =================
 @login_required
 def remove_from_cart(request, cart_id):
@@ -63,6 +83,8 @@ def remove_from_cart(request, cart_id):
     cart_item = get_object_or_404(Cart, pk=cart_id, user=request.user)
     cart_item.delete()
     return redirect("cart_view")
+
+
 # ================= UPDATE CART ITEM QUANTITY =================
 @login_required
 def update_cart_item(request, cart_id):
@@ -78,14 +100,28 @@ def update_cart_item(request, cart_id):
         else:
             cart_item.delete()  # Remove item if quantity is zero or less
     return redirect("cart_view")
+
+
 # ================= CHECKOUT =================
+@login_required
 def checkout(request):
+    """
+    Display checkout page with user's cart items
+    """
     cart_items = Cart.objects.filter(user=request.user)
     total = sum(item.product.price * item.quantity for item in cart_items)
-    return render(request, 'checkout.html', {'cart_items': cart_items, 'total': total})
+
+    return render(request, "checkout.html", {
+        "cart_items": cart_items,
+        "total": total
+    })
+
+
 # ================= ORDERS VIEW =================
 @login_required
 def orders_view(request):
-    """Display all orders for the logged-in user"""
+    """
+    Display all orders for the logged-in user
+    """
     user_orders = Order.objects.filter(user=request.user)
-    return render(request, 'orders.html', {'orders': user_orders})
+    return render(request, "orders.html", {"orders": user_orders})

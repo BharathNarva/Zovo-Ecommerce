@@ -15,15 +15,22 @@ class User(AbstractUser):
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     category = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock_quantity = models.IntegerField()
+    stock_quantity = models.IntegerField(default=0)
     image = models.ImageField(upload_to='product_images/', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
+    #  NEW field for marking products as trending
+    trending = models.BooleanField(default=False)
+
     class Meta:
         db_table = 'products'
+
+    def __str__(self):
+        return self.product_name
+
 
 # ================= CART MODEL =================
 class Cart(models.Model):
