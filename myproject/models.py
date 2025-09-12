@@ -1,15 +1,15 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from django.utils import timezone
 # ================= CUSTOM USER MODEL =================
 class User(AbstractUser):
-    # Username, email, password already included in AbstractUser
     phone = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     role = models.CharField(max_length=10, default='customer')
 
     class Meta:
-        db_table = 'users'  # Matches your MySQL users table
+        db_table = 'users'
+
 
 # ================= PRODUCT MODEL =================
 class Product(models.Model):
@@ -21,8 +21,6 @@ class Product(models.Model):
     stock_quantity = models.IntegerField(default=0)
     image = models.ImageField(upload_to='product_images/', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
-
-    #  NEW field for marking products as trending
     trending = models.BooleanField(default=False)
 
     class Meta:
@@ -30,6 +28,20 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+
+
+# ================= DISCOUNT MODEL =================
+class Discount(models.Model):
+    discount_id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    discounted_price = models.DecimalField(max_digits=10, decimal_places=2)
+    end_time = models.DateTimeField()
+
+    class Meta:
+        db_table = 'discounts'
+
+    def __str__(self):
+        return f"{self.product.product_name} - {self.discounted_price}"
 
 
 # ================= CART MODEL =================
@@ -42,6 +54,7 @@ class Cart(models.Model):
 
     class Meta:
         db_table = 'cart'
+
 
 # ================= ORDER MODEL =================
 class Order(models.Model):
@@ -64,6 +77,7 @@ class Order(models.Model):
     class Meta:
         db_table = 'orders'
 
+
 # ================= ORDER ITEM MODEL =================
 class OrderItem(models.Model):
     order_item_id = models.AutoField(primary_key=True)
@@ -74,3 +88,19 @@ class OrderItem(models.Model):
 
     class Meta:
         db_table = 'order_items'
+# models.py (add at the bottom)
+class Banner(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='banner_images/Mega Deal')
+    link = models.URLField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'banners'
+
+    def __str__(self):
+        return self.title
+
+# Add flash_deal to Product
+Product.add_to_class('flash_deal', models.BooleanField(default=False))

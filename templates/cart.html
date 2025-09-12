@@ -2,212 +2,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Cart - Zovo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart - ZoVo</title>
 
-  <!-- FontAwesome for icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<!-- FontAwesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0d1b2a;
-      color: #f1faee;
-    }
+<style>
+/* ================== BODY & GENERAL ================== */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #0d1b2a, #1b263b, #243447);
+  color: #f1faee;
+}
 
-    /* Navbar */
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #1b263b;
-      padding: 10px 20px;
-    }
-    .navbar .logo {
-      display: flex;
-      align-items: center;
-    }
-    .navbar img {
-      height: 40px;
-      margin-right: 10px;
-    }
-    .navbar h1 {
-      font-size: 20px;
-      margin: 0;
-      color: #ffd166;
-    }
-    .nav-links a {
-      color: #f1faee;
-      margin-left: 15px;
-      text-decoration: none;
-    }
+/* ================== LOGO ================== */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #ff6600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: transform 0.3s;
+}
+.logo-icon:hover { transform: scale(1.2); }
+.logo-text {
+  font-weight: 700;
+  font-size: 24px;
+  color: #ff6600;
+  letter-spacing: 1px;
+  margin: 0;
+}
 
-    /* Cart container */
-    .cart-container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #1b263b;
-      border-radius: 10px;
-    }
-    .cart-container h2 {
-      margin-bottom: 20px;
-      color: #ffd166;
-    }
+/* ================== NAVBAR ================== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(27,38,59,0.85);
+  padding: 10px 20px;
+  backdrop-filter: blur(6px);
+}
+.nav-links a {
+  color: #f1faee;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
+}
 
-    /* Cart table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 12px;
-      text-align: center;
-    }
-    th {
-      background: #243447;
-    }
-    tr:nth-child(even) {
-      background: #162436;
-    }
-    .actions button {
-      margin: 0 5px;
-      padding: 5px 10px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .btn-minus { background: #e63946; color: white; }
-    .btn-plus { background: #06d6a0; color: white; }
-    .btn-remove { background: #ffd166; color: black; }
+/* ================== CART CONTAINER ================== */
+.cart-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 25px;
+  background: rgba(27,38,59,0.85);
+  border-radius: 15px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+}
+.cart-container h2 {
+  margin-bottom: 25px;
+  color: #ffd166;
+  text-align: center;
+  font-size: 28px;
+}
 
-    /* Total section */
-    .cart-total {
-      margin-top: 20px;
-      text-align: right;
-      font-size: 18px;
-    }
-    .checkout-btn {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #e63946;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .checkout-btn:hover {
-      background: #ffd166;
-      color: #000;
-    }
-  </style>
+/* ================== CART GRID ================== */
+.cart-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+.cart-card {
+  background: #243447;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.cart-card:hover { 
+  transform: translateY(-5px); 
+  box-shadow: 0 12px 20px rgba(0,0,0,0.6);
+}
+.cart-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.cart-card h3 { margin: 5px 0; font-size: 18px; color: #ffd166; }
+.cart-card p { margin: 5px 0; font-size: 14px; }
+.price { font-weight: bold; margin: 5px 0; color: #06d6a0; }
+.cart-card button {
+  margin: 5px 5px 0 5px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+.btn-minus { background: #e63946; color: white; }
+.btn-plus { background: #06d6a0; color: white; }
+.btn-remove { background: #ffd166; color: black; }
+
+/* ================== TOTAL & CHECKOUT ================== */
+.cart-total {
+  margin-top: 30px;
+  text-align: right;
+  font-size: 22px;
+  font-weight: 500;
+}
+.checkout-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 25px;
+  background: #e63946;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.checkout-btn:hover {
+  background: #ffd166;
+  color: #000;
+}
+</style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <div class="logo">
-      <img src="https://dummyimage.com/40x40/ffd166/000000.png&text=Z" alt="Zovo Logo">
-      <h1>Zovo</h1>
-    </div>
-    <div class="nav-links">
-      <a href="{% url 'index' %}">🏠 Home</a>
-      {% comment %} <a href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a> {% endcomment %}
-    </div>
+<!-- ================== NAVBAR ================== -->
+<div class="navbar">
+  <div class="logo">
+    <div class="logo-icon">Z</div>
+    <div class="logo-text">ZoVo</div>
   </div>
-
-  <!-- Cart Section -->
-  <div class="cart-container">
-    <h2>Your Shopping Cart</h2>
-    <table id="cart-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Price (₹)</th>
-          <th>Quantity</th>
-          <th>Total (₹)</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- JS will inject products here -->
-      </tbody>
-    </table>
-    <div class="cart-total">
-      <strong>Grand Total: ₹<span id="grand-total">0</span></strong>
-    </div>
-    <button class="checkout-btn">Proceed to Checkout</button>
+  <div class="nav-links">
+    <a href="{% url 'index' %}">🏠 Home</a>
   </div>
+</div>
 
-  <script>
-    // Load cart from localStorage or start empty
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let cartCountElement = document.getElementById("cart-count");
-    let cartTableBody = document.querySelector("#cart-table tbody");
-    let grandTotalElement = document.getElementById("grand-total");
+<!-- ================== CART CONTENT ================== -->
+<div class="cart-container">
+  <h2>Your Shopping Cart</h2>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-total">
+    <strong>Grand Total: ₹<span id="grand-total">0</span></strong>
+  </div>
+  <button class="checkout-btn">Proceed to Checkout</button>
+</div>
 
-    // Function to update navbar count
-    function updateCartCount() {
-      let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-      cartCountElement.textContent = totalItems;
-    }
+<script>
+// ================== CART FROM LOCALSTORAGE ==================
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartItemsContainer = document.getElementById("cart-items");
+const grandTotalElement = document.getElementById("grand-total");
 
-    // Function to render cart items
-    function renderCart() {
-      cartTableBody.innerHTML = ""; // Clear old data
-      let grandTotal = 0;
+// ================== RENDER CART ==================
+function renderCart() {
+  cartItemsContainer.innerHTML = "";
+  let grandTotal = 0;
 
-      if (cart.length === 0) {
-        cartTableBody.innerHTML = `<tr><td colspan="5">Your cart is empty</td></tr>`;
-      } else {
-        cart.forEach((item, index) => {
-          let itemTotal = item.price * item.quantity;
-          grandTotal += itemTotal;
+  if(cart.length === 0) {
+    cartItemsContainer.innerHTML = `<p style="grid-column:1/-1; text-align:center;">Your cart is empty</p>`;
+    grandTotalElement.textContent = "0";
+    return;
+  }
 
-          let row = `
-            <tr>
-              <td>${item.name}</td>
-              <td>₹${item.price.toFixed(2)}</td>
-              <td>${item.quantity}</td>
-              <td>₹${itemTotal.toFixed(2)}</td>
-              <td class="actions">
-                <button class="btn-minus" onclick="updateQuantity(${index}, -1)">-</button>
-                <button class="btn-plus" onclick="updateQuantity(${index}, 1)">+</button>
-                <button class="btn-remove" onclick="removeItem(${index})">Remove</button>
-              </td>
-            </tr>
-          `;
-          cartTableBody.innerHTML += row;
-        });
-      }
+  cart.forEach((item,index) => {
+    // Calculate total for this item
+    const itemTotal = item.price * item.quantity;
+    grandTotal += itemTotal;
 
-      grandTotalElement.textContent = grandTotal.toFixed(2);
-      updateCartCount();
-    }
+    // Create card
+    const card = document.createElement("div");
+    card.className = "cart-card";
+    card.innerHTML = `
+      <!-- Product Image: from Django uploaded image or fallback -->
+      <img src="${item.image_url || '{% static "images/placeholder.png" %}'}" alt="${item.name}">
+      <h3>${item.name}</h3>
+      <p class="price">₹${item.price.toFixed(2)}</p>
+      <p>Qty: ${item.quantity}</p>
+      <div>
+        <!-- Quantity buttons -->
+        <button class="btn-minus" onclick="updateQuantity(${index}, -1)">-</button>
+        <button class="btn-plus" onclick="updateQuantity(${index}, 1)">+</button>
+        <button class="btn-remove" onclick="removeItem(${index})">Remove</button>
+      </div>
+    `;
+    cartItemsContainer.appendChild(card);
+  });
 
-    // Function to update quantity
-    function updateQuantity(index, change) {
-      cart[index].quantity += change;
-      if (cart[index].quantity <= 0) {
-        cart.splice(index, 1); // Remove if quantity 0
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
+  grandTotalElement.textContent = grandTotal.toFixed(2);
+}
 
-    // Function to remove an item
-    function removeItem(index) {
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
+// ================== UPDATE QUANTITY ==================
+function updateQuantity(index, change) {
+  const product = cart[index];
 
-    // Initial render
-    renderCart();
-  </script>
+  // Check stock if defined
+  if(product.stock_quantity !== undefined && change > 0 && product.quantity + change > product.stock_quantity) {
+    alert(`Only ${product.stock_quantity} item(s) left in stock!`);
+    return;
+  }
+
+  product.quantity += change;
+  if(product.quantity <= 0) cart.splice(index, 1); // remove if zero
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+// ================== REMOVE ITEM ==================
+function removeItem(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+// ================== INITIAL RENDER ==================
+renderCart();
+</script>
 </body>
 </html>
-
